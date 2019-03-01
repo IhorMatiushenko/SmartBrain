@@ -1,5 +1,6 @@
 import React from 'react';
 
+import './Navigation.css';
 import Logo from '../Logo/Logo';
 
 const Navigation = () => {
@@ -10,6 +11,5 @@ const Navigation = () => {
     </nav>
   );
 };
-
 
 export default Navigation;

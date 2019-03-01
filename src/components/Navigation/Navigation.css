@@ -1,0 +1,19 @@
+.nav {
+  min-height: 110px;
+  /*background-color: #fafbfc;*/
+  /*background-color: #f1f8ff;*/
+}
+
+.logo {
+  max-width: 320px;
+}
+
+.logo-image {
+  width: 100px;
+}
+
+@media(max-width: 445px) {
+  .logo {
+    max-width: 245px;
+  }
+}
