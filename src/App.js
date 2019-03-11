@@ -27,7 +27,14 @@ class App extends Component {
     const imageWidth = Number(image.width);
     const imageHeight = Number(image.height);
 
-    console.log(imageWidth, imageHeight);
+    console.log(clarifaiFace);
+
+    return {
+      bottomRow: imageHeight - (clarifaiFace.bottom_row * imageHeight),
+      leftCol: clarifaiFace.left_col * imageWidth,
+      rightCol: imageWidth - (clarifaiFace.right_col * imageWidth),
+      topRow: clarifaiFace.top_row * imageHeight,
+    };
   };
 
   onInputChange = (event) => {
