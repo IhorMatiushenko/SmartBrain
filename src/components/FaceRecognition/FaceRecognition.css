@@ -1,0 +1,10 @@
+.face-recognition-image-wrapper {
+  max-width: 700px;
+  min-width: 320px;
+}
+
+.face-recognition-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

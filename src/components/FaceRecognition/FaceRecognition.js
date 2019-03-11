@@ -1,10 +1,18 @@
 import React from 'react';
 
-const FaceRecognition = ({ imageUrl }) => {
+import './FaceRecognition.css';
+
+const FaceRecognition = ({ imageUrl, imageRef }) => {
   return (
-    <div className='flex justify-center pa4 w-100'>
-      <img className='mw-100' src={imageUrl} alt=""/>
-    </div>
+    <section className='flex justify-center w-100 pa4'>
+      <div className='face-recognition-image-wrapper'>
+        <img
+          className='face-recognition-image'
+          src={imageUrl}
+          ref={imageRef}
+        />
+      </div>
+    </section>
   );
 };
 
