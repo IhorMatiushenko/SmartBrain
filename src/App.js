@@ -16,25 +16,50 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
-      box: {},
+      faceBoxes: [],
     };
   }
 
-  calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
-    // console.log(clarifaiFace);
+  static imageData = null;
+
+  componentDidMount() {
+    window.addEventListener("resize", this.calculateFacesLocations.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.calculateFacesLocations.bind(this));
+  }
+
+  calculateFacesLocations = () => {
+    if (!App.imageData) return;
+
     const image = this.imageElement;
     const imageWidth = Number(image.width);
     const imageHeight = Number(image.height);
 
-    console.log(clarifaiFace);
+    const facesLocations = App.imageData.map(faceData => {
+      const boundingBox = faceData.region_info.bounding_box;
 
-    return {
-      bottomRow: imageHeight - (clarifaiFace.bottom_row * imageHeight),
-      leftCol: clarifaiFace.left_col * imageWidth,
-      rightCol: imageWidth - (clarifaiFace.right_col * imageWidth),
-      topRow: clarifaiFace.top_row * imageHeight,
-    };
+      return {
+        leftCol: boundingBox.left_col * imageWidth,
+        topRow: boundingBox.top_row * imageHeight,
+        rightCol: imageWidth - (boundingBox.right_col * imageWidth),
+        bottomRow: imageHeight - (boundingBox.bottom_row * imageHeight),
+      };
+    });
+
+    this.displayFacesBoxes(facesLocations);
+  };
+
+
+  setFacesLocations = (data) => {
+    App.imageData = data.outputs[0].data.regions;
+
+    this.calculateFacesLocations();
+  };
+
+  displayFacesBoxes = (faceBoxes) => {
+    this.setState(() => ({ faceBoxes }));
   };
 
   onInputChange = (event) => {
@@ -52,11 +77,15 @@ class App extends Component {
 
     clarifaiApp.models.initModel({id: Clarifai.FACE_DETECT_MODEL})
       .then(generalModel => generalModel.predict(this.state.input))
-      .then(response => this.calculateFaceLocation(response))
+      .then(response => {
+        this.setFacesLocations(response);
+      })
       .catch(err => console.error(err));
   };
 
   render() {
+    const { faceBoxes, imageUrl } = this.state;
+
     return (
       <div className="App">
         <Navigation />
@@ -66,7 +95,8 @@ class App extends Component {
           onButtonSubmit={this.onButtonSubmit}
         />
         <FaceRecognition
-          imageUrl={this.state.imageUrl}
+          faceBoxes={faceBoxes}
+          imageUrl={imageUrl}
           imageRef={el => (this.imageElement = el)}
         />
       </div>
