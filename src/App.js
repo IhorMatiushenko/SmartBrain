@@ -8,6 +8,8 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Runk';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 
+// import ImageRecognition from './services/ImageRecognition';
+
 import './App.css';
 
 class App extends Component {
@@ -16,11 +18,10 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
+      imageData: [],
       faceBoxes: [],
     };
   }
-
-  static imageData = null;
 
   componentDidMount() {
     window.addEventListener("resize", this.calculateFacesLocations.bind(this));
@@ -31,13 +32,13 @@ class App extends Component {
   }
 
   calculateFacesLocations = () => {
-    if (!App.imageData) return;
+    if (this.state.imageData.length <= 0) return;
 
     const image = this.imageElement;
     const imageWidth = Number(image.width);
     const imageHeight = Number(image.height);
 
-    const facesLocations = App.imageData.map(faceData => {
+    const facesLocations = this.state.imageData.map(faceData => {
       const boundingBox = faceData.region_info.bounding_box;
 
       return {
@@ -53,9 +54,10 @@ class App extends Component {
 
 
   setFacesLocations = (data) => {
-    App.imageData = data.outputs[0].data.regions;
-
-    this.calculateFacesLocations();
+    const regions = data.outputs[0].data.regions;
+    this.setState(() => ({
+      imageData: regions
+    }), this.calculateFacesLocations());
   };
 
   displayFacesBoxes = (faceBoxes) => {
