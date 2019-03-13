@@ -8,7 +8,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Runk';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 
-// import ImageRecognition from './services/ImageRecognition';
+import ImageRecognition from './services/ImageRecognition';
 
 import './App.css';
 
@@ -31,32 +31,49 @@ class App extends Component {
     window.removeEventListener("resize", this.calculateFacesLocations.bind(this));
   }
 
+  // calculateFacesLocations = () => {
+  //   if (this.state.imageData.length <= 0) return;
+  //
+  //   const image = this.imageElement;
+  //   const imageWidth = Number(image.width);
+  //   const imageHeight = Number(image.height);
+  //
+  //   const facesLocations = this.state.imageData.map(faceData => {
+  //     const boundingBox = faceData.region_info.bounding_box;
+  //
+  //     return {
+  //       leftCol: boundingBox.left_col * imageWidth,
+  //       topRow: boundingBox.top_row * imageHeight,
+  //       rightCol: imageWidth - (boundingBox.right_col * imageWidth),
+  //       bottomRow: imageHeight - (boundingBox.bottom_row * imageHeight),
+  //     };
+  //   });
+  //
+  //   this.displayFacesBoxes(facesLocations);
+  // };
+
   calculateFacesLocations = () => {
-    if (this.state.imageData.length <= 0) return;
-
     const image = this.imageElement;
-    const imageWidth = Number(image.width);
-    const imageHeight = Number(image.height);
+    const recognizedZones = this.state.imageData;
 
-    const facesLocations = this.state.imageData.map(faceData => {
-      const boundingBox = faceData.region_info.bounding_box;
-
-      return {
-        leftCol: boundingBox.left_col * imageWidth,
-        topRow: boundingBox.top_row * imageHeight,
-        rightCol: imageWidth - (boundingBox.right_col * imageWidth),
-        bottomRow: imageHeight - (boundingBox.bottom_row * imageHeight),
-      };
-    });
+    const facesLocations = ImageRecognition.getRecognizedZonesLocations(image, recognizedZones);
 
     this.displayFacesBoxes(facesLocations);
   };
 
 
-  setFacesLocations = (data) => {
-    const regions = data.outputs[0].data.regions;
+  // setFacesLocations = (data) => {
+  //   const regions = data.outputs[0].data.regions;
+  //   this.setState(() => ({
+  //     imageData: regions
+  //   }), this.calculateFacesLocations());
+  // };
+
+  setFacesLocations = () => {
+    const recognizedZones = ImageRecognition.getImageData(this.state.input);
+
     this.setState(() => ({
-      imageData: regions
+      imageData: recognizedZones
     }), this.calculateFacesLocations());
   };
 
@@ -77,12 +94,14 @@ class App extends Component {
       imageUrl: this.state.input,
     }));
 
-    clarifaiApp.models.initModel({id: Clarifai.FACE_DETECT_MODEL})
-      .then(generalModel => generalModel.predict(this.state.input))
-      .then(response => {
-        this.setFacesLocations(response);
-      })
-      .catch(err => console.error(err));
+    this.setFacesLocations();
+
+    // clarifaiApp.models.initModel({id: Clarifai.FACE_DETECT_MODEL})
+    //   .then(generalModel => generalModel.predict(this.state.input))
+    //   .then(response => {
+    //     this.setFacesLocations(response);
+    //   })
+    //   .catch(err => console.error(err));
   };
 
   render() {
