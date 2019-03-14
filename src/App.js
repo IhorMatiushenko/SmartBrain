@@ -1,84 +1,53 @@
 import React, { Component } from 'react';
-import Clarifai from 'clarifai';
-
-import clarifaiApp from './api/clarifaiAPI';
 
 import Navigation from './components/Navigation/Navigation';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Runk';
-import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import ImageZonesRecognition from './components/ImageZonesRecognition/ImageZonesRecognition';
 
 import ImageRecognition from './services/ImageRecognition';
 
 import './App.css';
 
 class App extends Component {
+
   constructor() {
     super();
     this.state = {
       input: '',
       imageUrl: '',
-      imageData: [],
-      faceBoxes: [],
+      recognizedZones: [],
+      recognizedZonesLocations: [],
     };
   }
 
   componentDidMount() {
-    window.addEventListener("resize", this.calculateFacesLocations.bind(this));
+    window.addEventListener("resize", this.calculateRecognizedZonesLocations.bind(this));
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.calculateFacesLocations.bind(this));
+    window.removeEventListener("resize", this.calculateRecognizedZonesLocations.bind(this));
   }
 
-  // calculateFacesLocations = () => {
-  //   if (this.state.imageData.length <= 0) return;
-  //
-  //   const image = this.imageElement;
-  //   const imageWidth = Number(image.width);
-  //   const imageHeight = Number(image.height);
-  //
-  //   const facesLocations = this.state.imageData.map(faceData => {
-  //     const boundingBox = faceData.region_info.bounding_box;
-  //
-  //     return {
-  //       leftCol: boundingBox.left_col * imageWidth,
-  //       topRow: boundingBox.top_row * imageHeight,
-  //       rightCol: imageWidth - (boundingBox.right_col * imageWidth),
-  //       bottomRow: imageHeight - (boundingBox.bottom_row * imageHeight),
-  //     };
-  //   });
-  //
-  //   this.displayFacesBoxes(facesLocations);
-  // };
-
-  calculateFacesLocations = () => {
-    const image = this.imageElement;
-    const recognizedZones = this.state.imageData;
-
-    const facesLocations = ImageRecognition.getRecognizedZonesLocations(image, recognizedZones);
-
-    this.displayFacesBoxes(facesLocations);
-  };
-
-
-  // setFacesLocations = (data) => {
-  //   const regions = data.outputs[0].data.regions;
-  //   this.setState(() => ({
-  //     imageData: regions
-  //   }), this.calculateFacesLocations());
-  // };
-
-  setFacesLocations = () => {
-    const recognizedZones = ImageRecognition.getImageData(this.state.input);
+  setRecognizedZones = async () => {
+    const recognizedZones = await ImageRecognition.getImageData(this.state.input);
 
     this.setState(() => ({
-      imageData: recognizedZones
-    }), this.calculateFacesLocations());
+      recognizedZones: recognizedZones
+    }), this.calculateRecognizedZonesLocations);
   };
 
-  displayFacesBoxes = (faceBoxes) => {
-    this.setState(() => ({ faceBoxes }));
+  calculateRecognizedZonesLocations = () => {
+    const image = this.imageElement;
+    const recognizedZones = this.state.recognizedZones;
+
+    const recognizedZonesLocations = ImageRecognition.getRecognizedZonesLocations(image, recognizedZones);
+
+    this.displayRecognizedZones(recognizedZonesLocations);
+  };
+
+  displayRecognizedZones = (recognizedZonesLocations) => {
+    this.setState(() => ({ recognizedZonesLocations }));
   };
 
   onInputChange = (event) => {
@@ -94,18 +63,11 @@ class App extends Component {
       imageUrl: this.state.input,
     }));
 
-    this.setFacesLocations();
-
-    // clarifaiApp.models.initModel({id: Clarifai.FACE_DETECT_MODEL})
-    //   .then(generalModel => generalModel.predict(this.state.input))
-    //   .then(response => {
-    //     this.setFacesLocations(response);
-    //   })
-    //   .catch(err => console.error(err));
+    this.setRecognizedZones();
   };
 
   render() {
-    const { faceBoxes, imageUrl } = this.state;
+    const { recognizedZonesLocations, imageUrl } = this.state;
 
     return (
       <div className="App">
@@ -115,8 +77,8 @@ class App extends Component {
           onInputChange={this.onInputChange}
           onButtonSubmit={this.onButtonSubmit}
         />
-        <FaceRecognition
-          faceBoxes={faceBoxes}
+        <ImageZonesRecognition
+          recognizedZonesLocations={recognizedZonesLocations}
           imageUrl={imageUrl}
           imageRef={el => (this.imageElement = el)}
         />

@@ -9,6 +9,15 @@ class ImageRecognition {
     return data.outputs[0].data.regions;
   };
 
+  static getImageData(imageUrl) {
+    return clarifaiApp.models.initModel({id: Clarifai.FACE_DETECT_MODEL})
+      .then(generalModel => generalModel.predict(imageUrl))
+      .then(response => {
+        return this.getRecognizedZones(response);
+      })
+      .catch(err => console.error(err));
+  };
+
   static getRecognizedZonesLocations(image, recognizedZones) {
     if (recognizedZones.length <= 0) return;
 
@@ -25,15 +34,6 @@ class ImageRecognition {
         bottomRow: imageHeight - (boundingBox.bottom_row * imageHeight),
       };
     });
-  };
-
-  static getImageData(imageUrl) {
-    clarifaiApp.models.initModel({id: Clarifai.FACE_DETECT_MODEL})
-      .then(generalModel => generalModel.predict(imageUrl))
-      .then(response => {
-        this.getRecognizedZones(response);
-      })
-      .catch(err => console.error(err));
   };
 
 }

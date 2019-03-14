@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './ImageLinkForm.css';
 
@@ -26,5 +27,9 @@ const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
     </div>
   );
 };
+
+// ImageLinkForm.propTypes = {
+//   onInputChange: PropTypes.array.isRequired,
+// };
 
 export default ImageLinkForm;
