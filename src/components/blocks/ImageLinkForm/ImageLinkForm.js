@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 
 import './ImageLinkForm.css';
 
+/**
+ * @param onInputChange
+ * @param onButtonSubmit
+ * @returns {*}
+ * @constructor
+ */
 const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
   return (
     <div>
@@ -28,8 +34,9 @@ const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
   );
 };
 
-// ImageLinkForm.propTypes = {
-//   onInputChange: PropTypes.array.isRequired,
-// };
+ImageLinkForm.propTypes = {
+  onInputChange: PropTypes.func.isRequired,
+  onButtonSubmit: PropTypes.func.isRequired,
+};
 
 export default ImageLinkForm;

@@ -2,13 +2,23 @@ import Clarifai from 'clarifai';
 
 import clarifaiApp from '../api/clarifaiAPI';
 
+/**
+ * image recognition service
+ */
+class ImageRecognitionService {
 
-class ImageRecognition {
-
+  /**
+   * @param {array} data
+   * @returns {Regions|*}
+   */
   static getRecognizedZones(data) {
     return data.outputs[0].data.regions;
   };
 
+  /**
+   * @param {string} imageUrl
+   * @returns {Promise<T | never | void>}
+   */
   static getImageData(imageUrl) {
     return clarifaiApp.models.initModel({id: Clarifai.FACE_DETECT_MODEL})
       .then(generalModel => generalModel.predict(imageUrl))
@@ -18,6 +28,12 @@ class ImageRecognition {
       .catch(err => console.error(err));
   };
 
+
+  /**
+   * @param image
+   * @param {array} recognizedZones
+   * @returns {Object|Uint8Array|BigInt64Array|{leftCol: number, topRow: number, rightCol: number, bottomRow: number}[]|Float64Array|Int8Array|Float32Array|Int32Array|Uint32Array|Uint8ClampedArray|BigUint64Array|Int16Array|Uint16Array|*}
+   */
   static getRecognizedZonesLocations(image, recognizedZones) {
     if (recognizedZones.length <= 0) return;
 
@@ -38,4 +54,4 @@ class ImageRecognition {
 
 }
 
-export default ImageRecognition
+export default ImageRecognitionService

@@ -3,6 +3,14 @@ import PropTypes from 'prop-types';
 
 import './ImageZonesRecognition.css';
 
+/**
+ * @typedef {object} Props
+ * @prop {array} recognizedZonesLocations
+ * @prop {string} imageUrl
+ * @prop {string} imageRef
+ *
+ * @extends {Component<Props>}
+ */
 class ImageZonesRecognition extends PureComponent {
   static propTypes = {
     recognizedZonesLocations: PropTypes.array.isRequired,
