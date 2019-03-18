@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import Navigation from '../../blocks/Navigation/Navigation';
 import ImageLinkForm from '../../blocks/ImageLinkForm/ImageLinkForm';
@@ -10,9 +11,12 @@ import ImageRecognitionService from '../../../services/ImageRecognition.service'
 import './Main.css';
 
 class Main extends PureComponent {
+  static propTypes = {
+    handleAuth: PropTypes.func.isRequired,
+  };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       input: '',
       imageUrl: '',
@@ -97,10 +101,13 @@ class Main extends PureComponent {
 
   render() {
     const { recognizedZonesLocations, imageUrl } = this.state;
+    const { handleAuth } = this.props;
 
     return (
       <div className="Main">
-        <Navigation />
+        <Navigation
+            handleAuth={handleAuth}
+        />
         <Rank />
         <ImageLinkForm
           onInputChange={this.onInputChange}

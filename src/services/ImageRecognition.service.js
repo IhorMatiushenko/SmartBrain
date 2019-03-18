@@ -8,24 +8,24 @@ import clarifaiApp from '../api/clarifaiAPI';
 class ImageRecognitionService {
 
   /**
-   * @param {array} data
-   * @returns {Regions|*}
-   */
-  static getRecognizedZones(data) {
-    return data.outputs[0].data.regions;
-  };
-
-  /**
    * @param {string} imageUrl
    * @returns {Promise<T | never | void>}
    */
   static getImageData(imageUrl) {
     return clarifaiApp.models.initModel({id: Clarifai.FACE_DETECT_MODEL})
-      .then(generalModel => generalModel.predict(imageUrl))
-      .then(response => {
-        return this.getRecognizedZones(response);
-      })
-      .catch(err => console.error(err));
+        .then(generalModel => generalModel.predict(imageUrl))
+        .then(response => {
+          return this.getRecognizedZones(response);
+        })
+        .catch(err => console.error(err));
+  };
+
+  /**
+   * @param {array} data
+   * @returns {Regions|*}
+   */
+  static getRecognizedZones(data) {
+    return data.outputs[0].data.regions;
   };
 
 

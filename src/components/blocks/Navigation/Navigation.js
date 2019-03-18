@@ -1,15 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './Navigation.css';
 import Logo from '../Logo/Logo';
 
-const Navigation = () => {
+const Navigation = ({ handleAuth }) => {
   return (
     <nav className="nav flex justify-between items-center bb">
       <Logo />
-      <p className='f3 link dim black underline pa3 pointer'>Sing Out</p>
+      <p
+        className='f3 link dim black underline pa3 pointer'
+        onClick={() => handleAuth(false)}
+      >
+        Sing Out
+      </p>
     </nav>
   );
+};
+
+Navigation.propTypes = {
+  handleAuth: PropTypes.func.isRequired,
 };
 
 export default Navigation;

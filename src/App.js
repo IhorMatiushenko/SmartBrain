@@ -1,28 +1,47 @@
 import React, { Component } from 'react';
 import { Route, Switch } from "react-router-dom";
 
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+
 import SingIn from './components/pages/SignIn/SignIn';
 import Main from './components/pages/Main/Main';
 
 import './App.css';
 
 class App extends Component {
-
   constructor() {
     super();
     this.state = {
-
+      isAuthenticated: true,
     };
   }
 
+  handleAuth = (isAuthenticated) => {
+    console.log(isAuthenticated);
+    this.setState(() => ({ isAuthenticated }));
+  };
+
   render() {
-
-
     return (
       <div className="App">
         <Switch>
-          <Route path="/" component={Main} />
-          <Route path="/login" component={SingIn} />
+          <ProtectedRoute
+              exact
+              path="/"
+              component={Main}
+              isAuthenticated={this.state.isAuthenticated}
+              handleAuth={this.handleAuth}
+          />
+          <Route
+            path="/login"
+            render={(props) =>
+              <SingIn
+                {...props}
+                isAuthenticated={this.state.isAuthenticated}
+                handleAuth={this.handleAuth}
+              />
+            }
+          />
         </Switch>
       </div>
     );
