@@ -68,6 +68,8 @@ class Main extends PureComponent {
    * @param {array} recognizedZonesLocations
    */
   displayRecognizedZones = (recognizedZonesLocations) => {
+    if(!recognizedZonesLocations || recognizedZonesLocations.length === 0) return;
+
     this.setState(() => ({ recognizedZonesLocations }));
   };
 

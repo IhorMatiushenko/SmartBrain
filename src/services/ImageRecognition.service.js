@@ -35,7 +35,7 @@ class ImageRecognitionService {
    * @returns {Object|Uint8Array|BigInt64Array|{leftCol: number, topRow: number, rightCol: number, bottomRow: number}[]|Float64Array|Int8Array|Float32Array|Int32Array|Uint32Array|Uint8ClampedArray|BigUint64Array|Int16Array|Uint16Array|*}
    */
   static getRecognizedZonesLocations(image, recognizedZones) {
-    if (recognizedZones.length <= 0) return;
+    if (!recognizedZones || recognizedZones.length === 0) return;
 
     const imageWidth = Number(image.width);
     const imageHeight = Number(image.height);

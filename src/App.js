@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
-import SingIn from './components/pages/SignIn/SignIn';
+import SingIn from './components/pages/Login/Login';
 import Main from './components/pages/Main/Main';
 
 import './App.css';
@@ -17,7 +17,6 @@ class App extends Component {
   }
 
   handleAuth = (isAuthenticated) => {
-    console.log(isAuthenticated);
     this.setState(() => ({ isAuthenticated }));
   };
 

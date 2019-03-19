@@ -12,7 +12,7 @@ const Navigation = ({ handleAuth }) => {
         className='f3 link dim black underline pa3 pointer'
         onClick={() => handleAuth(false)}
       >
-        Sing Out
+        Log Out
       </p>
     </nav>
   );
