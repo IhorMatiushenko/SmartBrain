@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
+import { Redirect, Link } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { Redirect } from "react-router-dom";
 
 
 class Register extends PureComponent {
@@ -32,9 +32,9 @@ class Register extends PureComponent {
     return (
       <section className="center mw5 mw6-ns br3 hidden ba b--black-10 mv6 shadow-5">
         <section className="pa4 black-80">
-          <form className="measure center">
+          <section className="measure center">
             <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-              <legend className="f2 fw6 ph0 mh0">Sign In</legend>
+              <legend className="f2 fw6 ph0 mh0">Register</legend>
               <div className="mt3">
                 <label className="db fw6 lh-copy f6" htmlFor="user-name">Name</label>
                 <input className="pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100" type="text" name="user-name" id="user-name" />
@@ -56,18 +56,14 @@ class Register extends PureComponent {
               <input
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
-                value="Sign in"
+                value="Register"
                 onClick={() => this.register()}
               />
             </div>
             <div className="lh-copy mt3">
-              <a href="#0"
-                 className="f6 link dim black db"
-              >
-                Log in
-              </a>
+              <Link to="/login" className="f6 link dim black db">Log in</Link>
             </div>
-          </form>
+          </section>
         </section>
       </section>
     );

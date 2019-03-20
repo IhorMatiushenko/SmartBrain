@@ -13,6 +13,7 @@ import './Main.css';
 class Main extends PureComponent {
   static propTypes = {
     handleAuth: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -103,12 +104,13 @@ class Main extends PureComponent {
 
   render() {
     const { recognizedZonesLocations, imageUrl } = this.state;
-    const { handleAuth } = this.props;
+    const { handleAuth, isAuthenticated } = this.props;
 
     return (
       <div className="Main">
         <Navigation
             handleAuth={handleAuth}
+            isAuthenticated={isAuthenticated}
         />
         <Rank />
         <ImageLinkForm

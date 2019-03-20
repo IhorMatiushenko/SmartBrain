@@ -8,6 +8,7 @@ const ProtectedRoute = ({ component: Component, isAuthenticated, handleAuth, ...
       ? <Component
           {...props}
           handleAuth={handleAuth}
+          isAuthenticated={isAuthenticated}
         />
       : <Redirect to={{
           pathname: '/login',

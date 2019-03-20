@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
+import { Redirect, Link } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { Redirect } from "react-router-dom";
 
 
 class SingIn extends PureComponent {
@@ -32,7 +32,7 @@ class SingIn extends PureComponent {
     return (
       <section className="center mw5 mw6-ns br3 hidden ba b--black-10 mv6 shadow-5">
         <section className="pa4 black-80">
-          <form className="measure center">
+          <section className="measure center">
             <fieldset id="sign_in" className="ba b--transparent ph0 mh0">
               <legend className="f2 fw6 ph0 mh0">Login</legend>
               <div className="mt3">
@@ -57,13 +57,9 @@ class SingIn extends PureComponent {
               />
             </div>
             <div className="lh-copy mt3">
-              <a href="#0"
-                 className="f6 link dim black db"
-              >
-                Register
-              </a>
+              <Link to="/register" className="f6 link dim black db">Register</Link>
             </div>
-          </form>
+          </section>
         </section>
       </section>
     );
