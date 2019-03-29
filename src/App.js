@@ -13,12 +13,24 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      isAuthenticated: true,
+      isAuthenticated: false,
+      user: null,
     };
   }
 
   handleAuth = (isAuthenticated) => {
     this.setState(() => ({ isAuthenticated }));
+  };
+
+  loadUser = (user) => {
+    this.setState(() => ({ user }));
+    // setTimeout(() => {console.log(this.state.user)}, 0);
+  };
+
+  setUserEntries = (entries) => {
+    this.setState((state) => ({
+
+    }));
   };
 
   render() {
@@ -31,6 +43,7 @@ class App extends Component {
             component={Main}
             isAuthenticated={this.state.isAuthenticated}
             handleAuth={this.handleAuth}
+            user={this.state.user}
           />
           <Route
             path="/login"
@@ -39,6 +52,7 @@ class App extends Component {
                 {...props}
                 isAuthenticated={this.state.isAuthenticated}
                 handleAuth={this.handleAuth}
+                loadUser={this.loadUser}
               />
             }
           />
@@ -49,6 +63,7 @@ class App extends Component {
                 {...props}
                 isAuthenticated={this.state.isAuthenticated}
                 handleAuth={this.handleAuth}
+                loadUser={this.loadUser}
               />
             }
           />

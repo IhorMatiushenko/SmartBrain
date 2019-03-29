@@ -6,19 +6,68 @@ import PropTypes from 'prop-types';
 class Register extends PureComponent {
   static propTypes = {
     handleAuth: PropTypes.func.isRequired,
+    loadUser: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       redirectToReferrer: false,
+      email: '',
+      password: '',
+      name: '',
     };
   }
 
-  register = () => {
+  onNameChange = (event) => {
+    const value = event.target.value;
+
+    this.setState(() => ({
+      name: value,
+    }));
+  };
+
+  onEmailChange = (event) => {
+    const value = event.target.value;
+
+    this.setState(() => ({
+      email: value,
+    }));
+  };
+
+  onPasswordChange = (event) => {
+    const value = event.target.value;
+
+    this.setState(() => ({
+      password: value,
+    }));
+  };
+
+  onSubmitRegister = () => {
+    fetch('http://localhost:3002/register', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        if (user) {
+          this.register(user);
+        }
+      });
+  };
+
+  register = (user) => {
     this.setState(() => ({
       redirectToReferrer: true
-    }), this.props.handleAuth(true))
+    }), () => {
+      this.props.handleAuth(true);
+      this.props.loadUser(user);
+    });
   };
 
   render() {
@@ -37,15 +86,33 @@ class Register extends PureComponent {
               <legend className="f2 fw6 ph0 mh0">Register</legend>
               <div className="mt3">
                 <label className="db fw6 lh-copy f6" htmlFor="user-name">Name</label>
-                <input className="pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100" type="text" name="user-name" id="user-name" />
+                <input
+                  className="pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100"
+                  type="text"
+                  name="user-name"
+                  id="user-name"
+                  onChange={this.onNameChange}
+                />
               </div>
               <div className="mt3">
                 <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-                <input className="pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100" type="email" name="email-address" id="email-address" />
+                <input
+                  className="pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100"
+                  type="email"
+                  name="email-address"
+                  id="email-address"
+                  onChange={this.onEmailChange}
+                />
               </div>
               <div className="mv3">
                 <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-                <input className="b pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100" type="password" name="password" id="password" />
+                <input
+                  className="b pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100"
+                  type="password"
+                  name="password"
+                  id="password"
+                  onChange={this.onPasswordChange}
+                />
               </div>
               <label className="pa0 ma0 lh-copy f6 pointer">
                 <input type="checkbox" />
@@ -57,7 +124,7 @@ class Register extends PureComponent {
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
                 value="Register"
-                onClick={() => this.register()}
+                onClick={this.onSubmitRegister}
               />
             </div>
             <div className="lh-copy mt3">

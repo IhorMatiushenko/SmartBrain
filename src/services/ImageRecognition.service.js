@@ -13,11 +13,11 @@ class ImageRecognitionService {
    */
   static getImageData(imageUrl) {
     return clarifaiApp.models.initModel({id: Clarifai.FACE_DETECT_MODEL})
-        .then(generalModel => generalModel.predict(imageUrl))
-        .then(response => {
+        .then((generalModel) => generalModel.predict(imageUrl))
+        .then((response) => {
           return this.getRecognizedZones(response);
         })
-        .catch(err => console.error(err));
+        .catch((err) => console.error(err));
   };
 
   /**
@@ -28,6 +28,17 @@ class ImageRecognitionService {
     return data.outputs[0].data.regions;
   };
 
+  static getUserEntries(userId) {
+    fetch('http://localhost:3002/image', {
+      method: 'put',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        id: userId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((userEntries) => userEntries);
+  };
 
   /**
    * @param image
@@ -40,7 +51,7 @@ class ImageRecognitionService {
     const imageWidth = Number(image.width);
     const imageHeight = Number(image.height);
 
-    return recognizedZones.map(recognizedZone => {
+    return recognizedZones.map((recognizedZone) => {
       const boundingBox = recognizedZone.region_info.bounding_box;
 
       return {

@@ -3,22 +3,61 @@ import { Redirect, Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 
-class SingIn extends PureComponent {
+class Login extends PureComponent {
   static propTypes = {
     handleAuth: PropTypes.func.isRequired,
+    loadUser: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       redirectToReferrer: false,
+      email: '',
+      password: '',
     };
   }
 
-  login = () => {
+  onEmailChange = (event) => {
+    const value = event.target.value;
+
+    this.setState(() => ({
+      email: value,
+    }));
+  };
+
+  onPasswordChange = (event) => {
+    const value = event.target.value;
+
+    this.setState(() => ({
+      password: value,
+    }));
+  };
+
+  onSubmitLogin = () => {
+    fetch('http://localhost:3002/login', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        email: this.state.email,
+        password: this.state.password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status.toString() === 'success') {
+          this.login(data.user);
+        }
+      });
+  };
+
+  login = (user) => {
     this.setState(() => ({
       redirectToReferrer: true
-    }), this.props.handleAuth(true))
+    }), () => {
+      this.props.handleAuth(true);
+      this.props.loadUser(user);
+    });
   };
 
   render() {
@@ -37,11 +76,23 @@ class SingIn extends PureComponent {
               <legend className="f2 fw6 ph0 mh0">Login</legend>
               <div className="mt3">
                 <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-                <input className="pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100" type="email" name="email-address" id="email-address" />
+                <input
+                  className="pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100"
+                  type="email"
+                  name="email-address"
+                  id="email-address"
+                  onChange={this.onEmailChange}
+                />
               </div>
               <div className="mv3">
                 <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-                <input className="b pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100" type="password" name="password" id="password" />
+                <input
+                  className="b pa2 input-reset ba bg-transparent hover-bg-light-gray hover-black w-100"
+                  type="password"
+                  name="password"
+                  id="password"
+                  onChange={this.onPasswordChange}
+                />
               </div>
               <label className="pa0 ma0 lh-copy f6 pointer">
                 <input type="checkbox" />
@@ -53,7 +104,7 @@ class SingIn extends PureComponent {
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
                 value="Log in"
-                onClick={() => this.login()}
+                onClick={this.onSubmitLogin}
               />
             </div>
             <div className="lh-copy mt3">
@@ -66,4 +117,4 @@ class SingIn extends PureComponent {
   }
 }
 
-export default SingIn;
+export default Login;

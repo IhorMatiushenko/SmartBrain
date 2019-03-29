@@ -14,6 +14,7 @@ class Main extends PureComponent {
   static propTypes = {
     handleAuth: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
+    user: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
   };
 
   constructor(props) {
@@ -45,7 +46,12 @@ class Main extends PureComponent {
    * @returns {Promise<void>}
    */
   setRecognizedZones = async () => {
+    const userId = this.props.user.id;
     const recognizedZones = await ImageRecognitionService.getImageData(this.state.input);
+
+    if (recognizedZones) {
+
+    }
 
     this.setState(() => ({
       recognizedZones: recognizedZones
@@ -104,15 +110,15 @@ class Main extends PureComponent {
 
   render() {
     const { recognizedZonesLocations, imageUrl } = this.state;
-    const { handleAuth, isAuthenticated } = this.props;
+    const { handleAuth, isAuthenticated, user } = this.props;
 
     return (
       <div className="Main">
         <Navigation
-            handleAuth={handleAuth}
-            isAuthenticated={isAuthenticated}
+          handleAuth={handleAuth}
+          isAuthenticated={isAuthenticated}
         />
-        <Rank />
+        <Rank user={user} />
         <ImageLinkForm
           onInputChange={this.onInputChange}
           onButtonSubmit={this.onButtonSubmit}
