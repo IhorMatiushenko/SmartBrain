@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 
 const Rank = ({ user }) => {
-  if (!user) return;
+  if (!user) return null;
 
   return (
     <div>

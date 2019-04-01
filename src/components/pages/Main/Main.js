@@ -7,6 +7,7 @@ import Rank from '../../blocks/Rank/Runk';
 import ImageZonesRecognition from '../../blocks/ImageZonesRecognition/ImageZonesRecognition';
 
 import ImageRecognitionService from '../../../services/ImageRecognition.service';
+import UserService from '../../../services/User.service';
 
 import './Main.css';
 
@@ -50,7 +51,9 @@ class Main extends PureComponent {
     const recognizedZones = await ImageRecognitionService.getImageData(this.state.input);
 
     if (recognizedZones) {
+      const entries = await UserService.getUserEntries(userId);
 
+      this.props.setUserEntries(entries);
     }
 
     this.setState(() => ({

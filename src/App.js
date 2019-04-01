@@ -24,12 +24,11 @@ class App extends Component {
 
   loadUser = (user) => {
     this.setState(() => ({ user }));
-    // setTimeout(() => {console.log(this.state.user)}, 0);
   };
 
   setUserEntries = (entries) => {
     this.setState((state) => ({
-
+      user: {...state.user,  entries},
     }));
   };
 
@@ -44,6 +43,7 @@ class App extends Component {
             isAuthenticated={this.state.isAuthenticated}
             handleAuth={this.handleAuth}
             user={this.state.user}
+            setUserEntries={this.setUserEntries}
           />
           <Route
             path="/login"

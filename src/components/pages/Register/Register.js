@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Redirect, Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
+import AuthService from '../../../services/Auth.service'
 
 class Register extends PureComponent {
   static propTypes = {
@@ -43,25 +44,7 @@ class Register extends PureComponent {
     }));
   };
 
-  onSubmitRegister = () => {
-    fetch('http://localhost:3002/register', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((user) => {
-        if (user) {
-          this.register(user);
-        }
-      });
-  };
-
-  register = (user) => {
+  onRegister = (user) => {
     this.setState(() => ({
       redirectToReferrer: true
     }), () => {
@@ -69,6 +52,15 @@ class Register extends PureComponent {
       this.props.loadUser(user);
     });
   };
+
+  onSubmitRegister = async () => {
+    const user = await AuthService.register(this.state.name, this.state.email, this.state.password);
+
+    if (user) {
+      this.onRegister(user);
+    }
+  };
+
 
   render() {
     const { from } = this.props.location.state || { from: { pathname: '/' }};

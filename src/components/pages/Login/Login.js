@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Redirect, Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
+import AuthService from '../../../services/Auth.service'
 
 class Login extends PureComponent {
   static propTypes = {
@@ -34,30 +35,21 @@ class Login extends PureComponent {
     }));
   };
 
-  onSubmitLogin = () => {
-    fetch('http://localhost:3002/login', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status.toString() === 'success') {
-          this.login(data.user);
-        }
-      });
-  };
-
-  login = (user) => {
+  onLogin = (user) => {
     this.setState(() => ({
       redirectToReferrer: true
     }), () => {
       this.props.handleAuth(true);
       this.props.loadUser(user);
     });
+  };
+
+  onSubmitLogin = async () => {
+    const userData = await AuthService.login(this.state.email, this.state.password);
+
+    if (userData.status.toString() === 'success') {
+      this.onLogin(userData.user);
+    }
   };
 
   render() {

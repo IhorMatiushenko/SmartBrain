@@ -17,7 +17,7 @@ class ImageRecognitionService {
         .then((response) => {
           return this.getRecognizedZones(response);
         })
-        .catch((err) => console.error(err));
+        .catch(console.log);
   };
 
   /**
@@ -26,18 +26,6 @@ class ImageRecognitionService {
    */
   static getRecognizedZones(data) {
     return data.outputs[0].data.regions;
-  };
-
-  static getUserEntries(userId) {
-    fetch('http://localhost:3002/image', {
-      method: 'put',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        id: userId,
-      }),
-    })
-      .then((response) => response.json())
-      .then((userEntries) => userEntries);
   };
 
   /**
